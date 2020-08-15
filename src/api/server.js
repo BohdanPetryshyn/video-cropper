@@ -4,7 +4,7 @@ const expressPinoLogger = require('express-pino-logger');
 const logger = require('../utils/logger');
 const handleApiError = require('./middleware/handleApiError');
 const handleError = require('./middleware/handleError');
-const { PORT } = require('../utils/config');
+const { PORT, RESULTS_PATH } = require('../utils/config');
 const handleUpload = require('./handlers/handleUpload');
 
 const app = express();
@@ -14,6 +14,7 @@ app.use(
     logger,
   })
 );
+app.use(`/${RESULTS_PATH}`, express.static(RESULTS_PATH));
 
 app.post('/video', handleUpload);
 
