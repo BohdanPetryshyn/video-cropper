@@ -1,10 +1,10 @@
 const { v4: uuidv4 } = require('uuid');
 
-const supportedContentTypes = require('./supportedContentTypes');
+const { contentTypeExtensions } = require('./contentTypes');
 
 module.exports = contentType => {
   const fileName = uuidv4();
-  const fileExtension = supportedContentTypes[contentType];
+  const fileExtension = contentTypeExtensions[contentType];
 
   return `${fileName}.${fileExtension}`;
 };

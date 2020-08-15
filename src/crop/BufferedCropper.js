@@ -5,8 +5,8 @@ const removeFile = require('./utils/removeFile');
 const defaultLogger = require('../utils/logger');
 
 class BufferedCropper {
-  constructor({ bufferDirectory, cropper, logger = defaultLogger } = {}) {
-    this.bufferDirectory = bufferDirectory;
+  constructor({ bufferPath, cropper, logger = defaultLogger } = {}) {
+    this.bufferPath = bufferPath;
     this.cropper = cropper;
     this.logger = logger;
   }
@@ -28,7 +28,8 @@ class BufferedCropper {
   }
 
   getBufferFileName(outputFileName) {
-    return path.join(this.bufferDirectory, outputFileName);
+    const fileName = path.basename(outputFileName);
+    return path.join(this.bufferPath, fileName);
   }
 }
 
