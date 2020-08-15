@@ -1,0 +1,12 @@
+{
+  "name": "video-cropper",
+  "version": "1.0.0",
+  "description": "Cropps your video. Eventually.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "keywords": [],
+  "author": "Bohdan Petryshyn",
+  "license": "ISC"
+}
