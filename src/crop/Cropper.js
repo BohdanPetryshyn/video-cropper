@@ -17,6 +17,24 @@ class Cropper {
     });
   }
 
+  cropFromStream(inputStream, outputFile) {
+    return new Promise((resolve, reject) => {
+      const ffmpegProcess = this.spawnFfmpegProcess('pipe:', outputFile)
+        .on('error', reject)
+        .on('exit', (code, signal) => {
+          if (signal) {
+            reject(new Error(`ffmpeg was terminated with signal ${signal}`));
+          } else if (code) {
+            reject(new Error(`ffmpeg finished with code ${code}`));
+          } else {
+            resolve();
+          }
+        });
+
+      inputStream.pipe(ffmpegProcess.stdin).on('error', reject);
+    });
+  }
+
   spawnFfmpegProcess(input, output) {
     const ffmpegArgs = this.getArgs(input, output, { cwd: process.cwd() });
     return spawn('ffmpeg', ffmpegArgs);
