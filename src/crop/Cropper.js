@@ -36,7 +36,7 @@ class Cropper {
   }
 
   spawnFfmpegProcess(input, output) {
-    const ffmpegArgs = this.getArgs(input, output, { cwd: process.cwd() });
+    const ffmpegArgs = this.getArgs(input, output);
     return spawn('ffmpeg', ffmpegArgs);
   }
 
