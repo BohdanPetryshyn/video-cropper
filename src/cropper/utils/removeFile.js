@@ -1,13 +1,4 @@
 const fs = require('fs');
+const util = require('util');
 
-module.exports = fileName => {
-  return new Promise((resolve, reject) => {
-    fs.unlink(fileName, error => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
-};
+module.exports = util.promisify(fs.unlink);
