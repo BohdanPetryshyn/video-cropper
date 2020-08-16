@@ -22,7 +22,9 @@ const cropMp4 = async (req, resultFileName) => {
   req.log.info(`Cropping ${resultFileName}.`);
   const bufferedCropper = new BufferedCropper({
     bufferPath: BUFFER_PATH,
-    cropper: new Cropper(),
+    cropper: new Cropper({
+      logger: req.log,
+    }),
     logger: req.log,
   });
 
@@ -31,7 +33,9 @@ const cropMp4 = async (req, resultFileName) => {
 
 const cropAvi = async (req, resultFileName) => {
   req.log.info(`Cropping ${resultFileName}.`);
-  const cropper = new Cropper();
+  const cropper = new Cropper({
+    logger: req.log,
+  });
 
   await cropper.cropFromStream(req, resultFileName);
 };

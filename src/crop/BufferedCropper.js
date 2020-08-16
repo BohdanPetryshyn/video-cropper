@@ -43,7 +43,7 @@ class BufferedCropper {
       await removeFile(bufferFileName);
       this.logger.info(`Buffer ${bufferFileName} cleaned successfully.`);
     } catch (error) {
-      this.logger.warn({ error }, `Buffer ${bufferFileName} clean up filed.`);
+      this.logger.warn({ error }, `Buffer ${bufferFileName} clean up failed.`);
     }
   }
 
