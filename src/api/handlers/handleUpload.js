@@ -5,9 +5,9 @@ const ApiError = require('../utils/ApiError');
 const buildFileName = require('../utils/buildFileName');
 const buildResultFileUrl = require('../utils/buildResultFileUrl');
 const buildResultFilePath = require('../utils/buildResultFilePath');
-const Cropper = require('../../crop/Cropper');
-const BufferedCropper = require('../../crop/BufferedCropper');
-const LimitedConcurrencyCropper = require('../../crop/LimitedConcurrencyCropper');
+const Cropper = require('../../cropper/Cropper');
+const BufferedCropper = require('../../cropper/BufferedCropper');
+const LimitedConcurrencyCropper = require('../../cropper/LimitedConcurrencyCropper');
 
 const ensureSupportedContentType = contentType => {
   if (!Object.values(contentTypes).includes(contentType)) {
