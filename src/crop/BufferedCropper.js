@@ -14,17 +14,37 @@ class BufferedCropper {
   async cropFromStream(inputStream, outputFileName) {
     const bufferFileName = this.getBufferFileName(outputFileName);
 
-    await streamToFile(inputStream, bufferFileName);
-
-    await this.cropper.cropFromFile(bufferFileName, outputFileName);
-
-    this.cleanUpBuffer(bufferFileName);
+    try {
+      await this.bufferInputStream(inputStream, bufferFileName);
+      await this.cropFromFile(bufferFileName, outputFileName);
+    } catch (error) {
+      this.logger.error({ error }, `Cropping ${outputFileName} failed.`);
+    } finally {
+      this.cleanUpBuffer(bufferFileName);
+    }
   }
 
-  cleanUpBuffer(bufferFileName) {
-    removeFile(bufferFileName).catch(error =>
-      this.logger.warn({ error }, 'Buffer clean up failed.')
+  async bufferInputStream(inputStream, bufferFileName) {
+    this.logger.info(`Buffering input to ${bufferFileName}.`);
+    await streamToFile(inputStream, bufferFileName);
+    this.logger.info(`Input buffered successfully to ${bufferFileName}.`);
+  }
+
+  async cropFromFile(bufferFileName, outputFileName) {
+    this.logger.info(
+      `Cropping buffered ${bufferFileName} to ${outputFileName}.`
     );
+    await this.cropper.cropFromFile(bufferFileName, outputFileName);
+    this.logger.info(`${bufferFileName} cropped successfully.`);
+  }
+
+  async cleanUpBuffer(bufferFileName) {
+    try {
+      await removeFile(bufferFileName);
+      this.logger.info(`Buffer ${bufferFileName} cleaned successfully.`);
+    } catch (error) {
+      this.logger.warn({ error }, `Buffer ${bufferFileName} clean up filed.`);
+    }
   }
 
   getBufferFileName(outputFileName) {

@@ -19,6 +19,7 @@ const ensureSupportedContentType = contentType => {
 };
 
 const cropMp4 = async (req, resultFileName) => {
+  req.log.info(`Cropping ${resultFileName}.`);
   const bufferedCropper = new BufferedCropper({
     bufferPath: BUFFER_PATH,
     cropper: new Cropper(),
@@ -29,6 +30,7 @@ const cropMp4 = async (req, resultFileName) => {
 };
 
 const cropAvi = async (req, resultFileName) => {
+  req.log.info(`Cropping ${resultFileName}.`);
   const cropper = new Cropper();
 
   await cropper.cropFromStream(req, resultFileName);

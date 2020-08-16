@@ -37,7 +37,7 @@ class Cropper {
       // Input name. Could be a file name or 'pipe:'
       // which mean that ffmpeg will accept it's stdin as input.
       input,
-      // Indicate that the video filter descriptions will go next.
+      // Indicate that the video filter description will go next.
       '-filter:v',
       // Crop video to the square of it's minimum dimension.
       // Centered by default.
