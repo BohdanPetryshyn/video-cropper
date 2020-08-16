@@ -1,3 +1,4 @@
 const runServer = require('./src/api/server');
+const setupEnvironment = require('./src/utils/setupEnvironment');
 
-runServer();
+setupEnvironment().then(runServer);
