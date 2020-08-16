@@ -24,6 +24,8 @@ class Cropper {
         reject
       );
 
+      ffmpegProcess.stderr.pipe(process.stdout);
+
       inputStream.pipe(ffmpegProcess.stdin).on('error', reject);
     });
   }

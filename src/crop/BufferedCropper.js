@@ -3,9 +3,14 @@ const path = require('path');
 const streamToFile = require('./utils/streamToFIle');
 const removeFile = require('./utils/removeFile');
 const defaultLogger = require('../utils/logger');
+const { BUFFER_PATH: defaultBufferPath } = require('../utils/config');
 
 class BufferedCropper {
-  constructor({ bufferPath, cropper, logger = defaultLogger } = {}) {
+  constructor({
+    bufferPath = defaultBufferPath,
+    cropper,
+    logger = defaultLogger,
+  } = {}) {
     this.bufferPath = bufferPath;
     this.cropper = cropper;
     this.logger = logger;

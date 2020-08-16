@@ -7,7 +7,7 @@ const buildResultFileUrl = require('../utils/buildResultFileUrl');
 const buildResultFilePath = require('../utils/buildResultFilePath');
 const Cropper = require('../../crop/Cropper');
 const BufferedCropper = require('../../crop/BufferedCropper');
-const { BUFFER_PATH } = require('../../utils/config');
+const LimitedConcurrencyCropper = require('../../crop/LimitedConcurrencyCropper');
 
 const ensureSupportedContentType = contentType => {
   if (!Object.values(contentTypes).includes(contentType)) {
@@ -18,26 +18,30 @@ const ensureSupportedContentType = contentType => {
   }
 };
 
-const cropMp4 = async (req, resultFileName) => {
-  req.log.info(`Cropping ${resultFileName}.`);
-  const bufferedCropper = new BufferedCropper({
-    bufferPath: BUFFER_PATH,
-    cropper: new Cropper({
-      logger: req.log,
-    }),
-    logger: req.log,
-  });
-
-  await bufferedCropper.cropFromStream(req, resultFileName);
-};
-
-const cropAvi = async (req, resultFileName) => {
-  req.log.info(`Cropping ${resultFileName}.`);
+const buildCropper = req => {
   const cropper = new Cropper({
     logger: req.log,
   });
+  const limitedConcurrencyCropper = new LimitedConcurrencyCropper({
+    logger: req.log,
+    cropper,
+  });
+  return new BufferedCropper({
+    logger: req.log,
+    cropper: limitedConcurrencyCropper,
+  });
+};
 
-  await cropper.cropFromStream(req, resultFileName);
+const cropVideo = async (req, resultFileName) => {
+  req.log.info(`Cropping ${resultFileName}.`);
+
+  const cropper = buildCropper(req);
+
+  try {
+    await cropper.cropFromStream(req, resultFileName);
+  } catch (error) {
+    req.log.error({ error }, `File cropping failed.`);
+  }
 };
 
 module.exports = (req, res) => {
@@ -50,11 +54,5 @@ module.exports = (req, res) => {
     croppedVideoUrl: buildResultFileUrl(req, resultFileName),
   });
 
-  if (contentType === contentTypes.MP4) {
-    cropMp4(req, buildResultFilePath(resultFileName));
-  }
-
-  if (contentType === contentTypes.AVI) {
-    cropAvi(req, buildResultFilePath(resultFileName));
-  }
+  cropVideo(req, buildResultFilePath(resultFileName));
 };
