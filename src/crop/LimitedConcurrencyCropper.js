@@ -20,15 +20,6 @@ class LimitedConcurrencyCropper {
       this.cropper.cropFromFile(inputFileName, outputFileName)
     );
   }
-
-  cropFromStream(inputStream, outputFile) {
-    this.logger.info(
-      `Queuing cropping from stream task. Number of pending tasks: ${this.limiter.pendingTasks}.`
-    );
-    return this.limiter.limit(() =>
-      this.cropper.cropFromStream(inputStream, outputFile)
-    );
-  }
 }
 
 module.exports = LimitedConcurrencyCropper;
