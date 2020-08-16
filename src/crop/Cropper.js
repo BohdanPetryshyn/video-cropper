@@ -3,41 +3,31 @@ const { spawn } = require('child_process');
 class Cropper {
   cropFromFile(inputFileName, outputFileName) {
     return new Promise((resolve, reject) => {
-      this.spawnFfmpegProcess(inputFileName, outputFileName)
-        .on('error', reject)
-        .on('exit', (code, signal) => {
-          if (signal) {
-            reject(new Error(`ffmpeg was terminated with signal ${signal}`));
-          } else if (code) {
-            reject(new Error(`ffmpeg finished with code ${code}`));
-          } else {
-            resolve();
-          }
-        });
+      this.spawnFfmpegProcess(inputFileName, outputFileName, resolve, reject);
     });
   }
 
   cropFromStream(inputStream, outputFile) {
     return new Promise((resolve, reject) => {
-      const ffmpegProcess = this.spawnFfmpegProcess('pipe:', outputFile)
-        .on('error', reject)
-        .on('exit', (code, signal) => {
-          if (signal) {
-            reject(new Error(`ffmpeg was terminated with signal ${signal}`));
-          } else if (code) {
-            reject(new Error(`ffmpeg finished with code ${code}`));
-          } else {
-            resolve();
-          }
-        });
+      const ffmpegProcess = this.spawnFfmpegProcess('pipe:', outputFile);
 
       inputStream.pipe(ffmpegProcess.stdin).on('error', reject);
     });
   }
 
-  spawnFfmpegProcess(input, output) {
+  spawnFfmpegProcess(input, output, resolve, reject) {
     const ffmpegArgs = this.getArgs(input, output);
-    return spawn('ffmpeg', ffmpegArgs);
+    return spawn('ffmpeg', ffmpegArgs)
+      .on('error', reject)
+      .on('exit', (code, signal) => {
+        if (signal) {
+          reject(new Error(`ffmpeg was terminated with signal ${signal}`));
+        } else if (code) {
+          reject(new Error(`ffmpeg finished with code ${code}`));
+        } else {
+          resolve();
+        }
+      });
   }
 
   getArgs(input, output) {
