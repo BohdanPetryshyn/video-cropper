@@ -4,8 +4,8 @@ const contentTypes = {
 };
 
 const contentTypeExtensions = {
-  'video/mp4': 'mp4',
-  'video/x-msvideo': 'avi',
+  [contentTypes.MP4]: 'mp4',
+  [contentTypes.AVI]: 'avi',
 };
 
 module.exports = {
