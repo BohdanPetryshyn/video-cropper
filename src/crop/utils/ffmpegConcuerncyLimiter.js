@@ -6,5 +6,5 @@ const limitFfmpeg = pLimit(FFMPEG_CONCURRENCY_LIMIT);
 
 module.exports = {
   limit: limitFfmpeg,
-  pendingTasks: limitFfmpeg.pendingCount,
+  getPendingTasksCount: () => limitFfmpeg.pendingCount,
 };

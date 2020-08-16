@@ -14,7 +14,7 @@ class LimitedConcurrencyCropper {
 
   cropFromFile(inputFileName, outputFileName) {
     this.logger.info(
-      `Queuing cropping from file task. Number of pending tasks: ${this.limiter.pendingTasks}.`
+      `Queuing cropping from file task. Number of pending tasks: ${this.limiter.getPendingTasksCount()}.`
     );
     return this.limiter.limit(() =>
       this.cropper.cropFromFile(inputFileName, outputFileName)
