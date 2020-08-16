@@ -24,9 +24,9 @@ The `mp4` and `avi` video formats are supported.
     2. As soon as input is saved to the file, spawn `ffmpeg` process that will produce the result file;
     3. As soon as the `ffmpeg` process finishes - delete the temp file.
     
-The response is being sent instantly because the processing can take while. A while means up to infinity.
+The response is being sent instantly because the processing can take a while. A while means up to infinity.
 Not all the clients can wait for an infinity, so it was decided that to return the response before we can make sure
-that the video is processable is still better that don't return the response at all.
+that the video is processable is still better than don't return the response at all.
     
 #### Development log
 From the very beginning the plan was to handle `mp4` and `avi` differently. 
@@ -38,8 +38,8 @@ the request data stream directly to the `ffmpeg` process.
 
 ##### So, why do we use buffering for `avi`?
 The problem is that controlling the `ffmpeg` process concurrency level is vital for application stability.
-That means that requests should be queued somehow. Obviously, we can't postpone the client data upload directly
-to the spawned process to the moment the turn comes. So, it was decided to apply buffering for all video formats.
+That means that requests should be queued somehow. Obviously, we can't postpone the client data upload
+to the moment the turn comes. So, it was decided to apply buffering for all video formats.
 
 One thing has left from the time the idea of the optimization was looking valid.
 
