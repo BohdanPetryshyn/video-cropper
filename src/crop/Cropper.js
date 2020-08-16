@@ -3,7 +3,7 @@ const { spawn } = require('child_process');
 class Cropper {
   cropFromFile(inputFileName, outputFileName) {
     return new Promise((resolve, reject) => {
-      const ffmpeg = this.spawnFfmpegProcess(inputFileName, outputFileName)
+      this.spawnFfmpegProcess(inputFileName, outputFileName)
         .on('error', reject)
         .on('exit', (code, signal) => {
           if (signal) {
@@ -14,7 +14,6 @@ class Cropper {
             resolve();
           }
         });
-      ffmpeg.stderr.pipe(process.stdout);
     });
   }
 
